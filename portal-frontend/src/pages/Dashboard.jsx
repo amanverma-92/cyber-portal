@@ -20,7 +20,8 @@ import {
   Feedback,
   Info,
   Visibility,
-  AddCircle
+  AddCircle,
+  Security
 } from "@mui/icons-material";
 
 export default function Dashboard() {
@@ -53,6 +54,12 @@ export default function Dashboard() {
       icon: <Assessment />, 
       onClick: () => navigate("/agents"),
       description: "Manage and View Agents"
+    },
+    { 
+      title: "Internal Agent", 
+      icon: <Security />, 
+      onClick: () => navigate("/internal-agent"),
+      description: "Network monitor and threat detection"
     },
     { 
       title: "View Policies", 

@@ -4,7 +4,9 @@ import axios from "axios";
 import { TextField, Button, Box, Alert } from "@mui/material";
 import { addLog } from "../blockchain"; // blockchain logger
 
-export default function PolicyForm({ onPolicyAdded }) {
+const ROLLBACK_MSG = "🛡️ Internal Agent: Security breach detected. Policy addition has been automatically rolled back to maintain system integrity.";
+
+export default function PolicyForm({ onPolicyAdded, onPolicyResult, isUnderAttack }) {
   const [name, setName] = useState("");
   const [rule, setRule] = useState("");
   const [error, setError] = useState("");
@@ -15,8 +17,13 @@ export default function PolicyForm({ onPolicyAdded }) {
     setError("");
     setSuccess("");
 
+    // UI-only demo: when under attack, simulate rollback without API call
+    if (isUnderAttack) {
+      onPolicyResult?.({ rollback: true, message: ROLLBACK_MSG });
+      return;
+    }
+
     try {
-      // 1️⃣ Add policy to backend
       const res = await axios.post(
         "/api/policies",
         { name, definition: { rule } },
@@ -27,24 +34,26 @@ export default function PolicyForm({ onPolicyAdded }) {
 
       if (res.status === 200 || res.status === 201) {
         try {
-          // 2️⃣ Log in blockchain
           await addLog("admin", `POLICY_ADDED: ${name}`);
           setSuccess("Policy added successfully and logged on blockchain!");
         } catch (bcError) {
           console.error("Blockchain log failed:", bcError);
           setError("Policy added, but blockchain log failed!");
         }
-
-        // 3️⃣ Reset form and refresh dashboard
         setName("");
         setRule("");
-        onPolicyAdded();
+        onPolicyAdded?.();
+        onPolicyResult?.({ rollback: false });
       } else {
         throw new Error(`Unexpected response: ${res.status}`);
       }
     } catch (err) {
-      console.error("Error adding policy:", err.response || err.message);
-      setError("Failed to add policy.");
+      const rollback = err.response?.data?.rollback;
+      if (rollback) {
+        onPolicyResult?.({ rollback: true, message: err.response?.data?.message || ROLLBACK_MSG });
+      } else {
+        setError("Failed to add policy.");
+      }
     }
   };
 

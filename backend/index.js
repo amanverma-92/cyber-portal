@@ -6,6 +6,8 @@ const { pool, initDb } = require("./db");
 const authRoutes = require("./routes/auth");
 const policyRoutes = require("./routes/policies");
 const agentRoutes = require('./routes/agents');
+const { router: logRoutes } = require('./routes/log');
+const { router: systemRoutes } = require('./routes/system');
 
 const app = express();
 app.use(cors());
@@ -20,8 +22,10 @@ app.use((req, res, next) => {
 // Initialize DB schema if enabled
 initDb();
 
-// Routes - more specific routes first
+// Routes - more specific mounts first (so /api/logs is matched before /api)
 app.use('/api/agents', agentRoutes);
+app.use("/api/logs", logRoutes);
+app.use("/api/system", systemRoutes);
 app.use("/api", authRoutes);
 app.use("/api", policyRoutes);
 

@@ -79,3 +79,29 @@ BEGIN
         ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'user' CHECK (role IN ('user', 'admin'));
     END IF;
 END $$;
+
+-- Create logs table to store both valid and faulty logs
+CREATE TABLE IF NOT EXISTS logs (
+    id SERIAL PRIMARY KEY,
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    server_id VARCHAR(255),    -- Can be NULL for faulty logs
+    firewall_id VARCHAR(255),  -- Can be NULL for faulty logs
+    username VARCHAR(255),     -- Named 'username' to avoid reserved keyword 'user'
+    action_type VARCHAR(100),
+    policy_name VARCHAR(255),
+    policy_rule TEXT,
+    status VARCHAR(50),        -- e.g., 'SUCCESS', 'FAILED'
+    ml_risk_score NUMERIC(5, 4), -- High precision for scores like 0.9987
+    log_source VARCHAR(100),   -- e.g., 'blockchain', 'backend', 'EXTERNAL_ATTACK'
+    blockchain_tx TEXT,
+    notes TEXT
+);
+
+-- Index for high-risk filtering (Used by the Internal Agent/UI)
+CREATE INDEX IF NOT EXISTS idx_logs_risk_score ON logs(ml_risk_score);
+
+-- Index for chronological sorting in the UI
+CREATE INDEX IF NOT EXISTS idx_logs_timestamp ON logs(timestamp DESC);
+
+-- Index for searching by server or firewall
+CREATE INDEX IF NOT EXISTS idx_logs_server_fw ON logs(server_id, firewall_id);

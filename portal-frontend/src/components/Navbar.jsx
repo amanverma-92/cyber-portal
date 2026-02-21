@@ -80,6 +80,9 @@ export default function Navbar() {
               <Button color="inherit" component={Link} to="/agents">
                 Agents
               </Button>
+              <Button color="inherit" component={Link} to="/internal-agent">
+                Internal Agent
+              </Button>
               <Button color="inherit" onClick={handleLogout}>
                 Logout
               </Button>

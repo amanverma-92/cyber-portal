@@ -1,6 +1,6 @@
 // src/App.jsx
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -10,18 +10,25 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import SecurityPredictionPage from "./pages/SecurityPredictionPage";
 import Agents from './pages/Agents';
+import InternalAgent from './pages/InternalAgent';
+
+// Import Demo Components
+import { SecurityProvider } from "./context/SecurityContext";
+import SecurityAlertBanner from "./components/SecurityAlertBanner";
 
 function App() {
   const token = localStorage.getItem("token");
 
   return (
-    <>
+    <SecurityProvider>
       <Navbar />
+      {/* Global alert visible on all pages when the "Attack" is active */}
+      <SecurityAlertBanner />
+      
       <Routes>
         <Route path="/" element={token ? <Dashboard /> : <Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
         
         {/* Protected routes */}
         <Route
@@ -40,7 +47,26 @@ function App() {
             </ProtectedRoute>
           }
         />
-<Route path="/agents" element={<Agents />} />
+        
+        {/* Protected Agent route to show the 100 faulty logs */}
+        <Route 
+          path="/agents" 
+          element={
+            <ProtectedRoute>
+              <Agents />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route
+          path="/internal-agent"
+          element={
+            <ProtectedRoute>
+              <InternalAgent />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/security-prediction"
           element={
@@ -50,7 +76,7 @@ function App() {
           }
         />
       </Routes>
-    </>
+    </SecurityProvider>
   );
 }
 
