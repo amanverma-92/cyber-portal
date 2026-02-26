@@ -2,8 +2,6 @@
 
 A full-stack cybersecurity monitoring and incident response platform featuring **real-time breach detection**, **AI-powered report generation**, **ML-based security predictions**, **blockchain-verified policy management**, and **autonomous security agents**.
 
-> **No external AI API keys required.** The breach analysis engine uses a custom algorithmic pipeline that performs data-grounded anomaly detection directly from runtime datasets.
-
 ---
 
 ## 📋 Table of Contents
@@ -30,7 +28,7 @@ A full-stack cybersecurity monitoring and incident response platform featuring *
 
 ## 🎯 Project Synopsis
 
-**Cyber Portal** is an enterprise-grade cybersecurity monitoring dashboard that simulates a real-world Security Operations Center (SOC). The system ingests security event logs (from CSV-based telemetry streams), detects anomalies using statistical analysis and pattern recognition, and automatically generates structured **AI Incident Response Reports** — all without relying on any external LLM/AI API.
+**Cyber Portal** is an enterprise-grade cybersecurity monitoring dashboard that simulates a real-world Security Operations Center (SOC). The system ingests security event logs (from CSV-based telemetry streams), detects anomalies using statistical analysis and pattern recognition, and automatically generates structured **AI Incident Response Reports**.
 
 ### Core Problem Solved
 In modern cybersecurity, SOC analysts face alert fatigue from thousands of daily events. This portal automates the process of:
@@ -100,7 +98,7 @@ In modern cybersecurity, SOC analysts face alert fatigue from thousands of daily
 ### AI / Analysis
 | Technology | Purpose |
 |---|---|
-| **Custom Algorithmic Engine** | Data-grounded breach analysis (no external AI API) |
+| **Custom Algorithmic Engine** | Data-grounded breach analysis |
 | **ModelBit API** | External ML model for single-event security prediction |
 | **CSV Parser** | Custom RFC-compliant CSV parser for log ingestion |
 
@@ -238,7 +236,7 @@ cyber-portal/
 
 ## 🧠 AI Breach Analysis Engine — How It Works
 
-The analysis engine (`backend/routes/breach.js`) is a **pure algorithmic pipeline** — no external AI API, no hardcoded reports. Every conclusion is derived from the actual data.
+The analysis engine (`backend/routes/breach.js`) is a **pure algorithmic pipeline**. 
 
 ### Pipeline Flow
 
@@ -655,6 +653,7 @@ This project is for educational and demonstration purposes.
 ## 👥 Contributors
 
 - **Buggie18** — [GitHub](https://github.com/Buggie18)
+- **ashmita-web** - [GitHub](https://github.com/ashmita-web)
 
 ---
 
