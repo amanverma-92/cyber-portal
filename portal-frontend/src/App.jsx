@@ -11,6 +11,7 @@ import Navbar from "./components/Navbar";
 import SecurityPredictionPage from "./pages/SecurityPredictionPage";
 import Agents from './pages/Agents';
 import InternalAgent from './pages/InternalAgent';
+import BreachReport from './pages/BreachReport';
 
 // Import Demo Components
 import { SecurityProvider } from "./context/SecurityContext";
@@ -24,12 +25,12 @@ function App() {
       <Navbar />
       {/* Global alert visible on all pages when the "Attack" is active */}
       <SecurityAlertBanner />
-      
+
       <Routes>
         <Route path="/" element={token ? <Dashboard /> : <Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
+
         {/* Protected routes */}
         <Route
           path="/dashboard"
@@ -47,15 +48,15 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
+
         {/* Protected Agent route to show the 100 faulty logs */}
-        <Route 
-          path="/agents" 
+        <Route
+          path="/agents"
           element={
             <ProtectedRoute>
               <Agents />
             </ProtectedRoute>
-          } 
+          }
         />
 
         <Route
@@ -63,6 +64,16 @@ function App() {
           element={
             <ProtectedRoute>
               <InternalAgent />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* AI Breach Report – generated from live CSV telemetry */}
+        <Route
+          path="/breach-report"
+          element={
+            <ProtectedRoute>
+              <BreachReport />
             </ProtectedRoute>
           }
         />

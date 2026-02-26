@@ -6,12 +6,14 @@ const { pool, initDb } = require("./db");
 const authRoutes = require("./routes/auth");
 const policyRoutes = require("./routes/policies");
 const agentRoutes = require('./routes/agents');
-const { router: logRoutes } = require('./routes/log');
-const { router: systemRoutes } = require('./routes/system');
+const breachRoutes = require('./routes/breach');
+let logRoutes, systemRoutes;
+try { logRoutes = require('./routes/log').router; } catch (e) { logRoutes = null; }
+try { systemRoutes = require('./routes/system').router; } catch (e) { systemRoutes = null; }
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -24,8 +26,9 @@ initDb();
 
 // Routes - more specific mounts first (so /api/logs is matched before /api)
 app.use('/api/agents', agentRoutes);
-app.use("/api/logs", logRoutes);
-app.use("/api/system", systemRoutes);
+app.use('/api/breach', breachRoutes);
+if (logRoutes) app.use("/api/logs", logRoutes);
+if (systemRoutes) app.use("/api/system", systemRoutes);
 app.use("/api", authRoutes);
 app.use("/api", policyRoutes);
 

@@ -5,9 +5,20 @@ const SecurityContext = createContext();
 
 export const SecurityProvider = ({ children }) => {
   const [isUnderAttack, setIsUnderAttack] = useState(false);
+  const [breachReport, setBreachReport] = useState(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   return (
-    <SecurityContext.Provider value={{ isUnderAttack, setUnderAttack: setIsUnderAttack }}>
+    <SecurityContext.Provider
+      value={{
+        isUnderAttack,
+        setUnderAttack: setIsUnderAttack,
+        breachReport,
+        setBreachReport,
+        isAnalyzing,
+        setIsAnalyzing,
+      }}
+    >
       {children}
     </SecurityContext.Provider>
   );
